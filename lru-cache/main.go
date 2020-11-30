@@ -70,11 +70,16 @@ func (lruCache LRUCache) isFull() bool {
 	return len(lruCache.NodeMap) == lruCache.Capacity
 }
 
+func (lruCache LRUCache) isExist(key string) bool {
+	return lruCache.NodeMap[key] != nil
+}
+
 func (lruCache *LRUCache) get(key string) (string, error) {
-	node := lruCache.NodeMap[key]
-	if node == nil {
+	if !lruCache.isExist(key) {
 		return "", errors.New("Not found")
 	}
+
+	node := lruCache.NodeMap[key]
 
 	lruCache.move(node)
 	lruCache.moveToHead(node)
@@ -83,6 +88,15 @@ func (lruCache *LRUCache) get(key string) (string, error) {
 }
 
 func (lruCache *LRUCache) insert(key string, value string) {
+	if lruCache.isExist(key) {
+		node := lruCache.NodeMap[key]
+		node.Value = value
+		lruCache.move(node)
+		lruCache.moveToHead(node)
+
+		return
+	}
+
 	if lruCache.isFull() {
 		lruCache.removeTail()
 	}
@@ -104,11 +118,4 @@ func main() {
 
 	val1, _ := lruCache.get("key1")
 	fmt.Println(val1)
-
-	lruCache.insert("key3", "value3")
-
-	val2, _ := lruCache.get("key2")
-	val3, _ := lruCache.get("key3")
-	fmt.Println(val2) //should be nil
-	fmt.Println(val3)
 }
