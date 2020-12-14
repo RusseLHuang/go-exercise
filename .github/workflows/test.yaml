@@ -26,5 +26,4 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Run test
-        run: cd leaky-bucket-rate-limiter && go test \
-          cd lru-cache && go-test
+        run: cd leaky-bucket-rate-limiter && go test
