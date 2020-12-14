@@ -1,0 +1,30 @@
+name: Unit test
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  test:
+    name: Run tests
+
+    strategy:
+      matrix:
+        go: ["1.14.x", "1.15.x"]
+        include:
+        - go: 1.15.x
+          latest: true
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Setup go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run test
+        run: cd leaky-bucket-rate-limiter && go test \
+          cd lru-cache && go-test
