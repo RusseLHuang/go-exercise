@@ -28,4 +28,5 @@ jobs:
       - name: Run test
         run: |-
           cd leaky-bucket-rate-limiter && go test
+          cd ..
           cd lru-cache && go test
