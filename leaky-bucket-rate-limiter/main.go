@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -10,13 +10,12 @@ import (
 type Limiter struct {
 	StartTime  time.Time
 	LimitTime  time.Duration
-	MaxRequest int
-	Count      int
-	Lock       sync.Mutex
+	MaxRequest uint64
+	Count      uint64
 }
 
 func New(
-	maxRequest int,
+	maxRequest uint64,
 ) Limiter {
 	return Limiter{
 		MaxRequest: maxRequest,
@@ -25,10 +24,7 @@ func New(
 }
 
 func (limiter *Limiter) Take() bool {
-	limiter.Lock.Lock()
-	defer limiter.Lock.Unlock()
-
-	countIncr := limiter.Count + 1
+	countIncr := atomic.LoadUint64(&limiter.Count) + 1
 
 	if limiter.Count == 0 || time.Now().After(limiter.StartTime.Add(limiter.LimitTime)) {
 		limiter.StartTime = time.Now()
@@ -37,7 +33,7 @@ func (limiter *Limiter) Take() bool {
 		return false
 	}
 
-	limiter.Count++
+	atomic.AddUint64(&limiter.Count, 1)
 
 	return true
 }

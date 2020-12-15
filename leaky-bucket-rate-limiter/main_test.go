@@ -3,7 +3,8 @@ package main
 import "testing"
 
 func TestMaxRequest(t *testing.T) {
-	maxRequest := 10
+	var maxRequest uint64
+	maxRequest = 10
 
 	totalConcurrentRequest := 15
 	reqChan := make(chan bool, totalConcurrentRequest)
