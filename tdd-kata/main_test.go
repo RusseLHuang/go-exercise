@@ -51,6 +51,15 @@ func TestStringCalculatorAddSupportNewLine(t *testing.T) {
 	}
 }
 
+func TestStringCalculatorAddSupportDifferentDelimiters(t *testing.T) {
+	stringCalculator := StringCalculator{}
+	sum := stringCalculator.Add("//;\n1;2;3")
+
+	if sum != 6 {
+		t.Fatalf("Empty string should return zero")
+	}
+}
+
 func TestStringCalculatorAddInvalidNumber(t *testing.T) {
 	stringCalculator := StringCalculator{}
 
