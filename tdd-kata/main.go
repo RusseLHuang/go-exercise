@@ -14,7 +14,9 @@ func (sc StringCalculator) Add(numStr string) int {
 		return sum
 	}
 
-	nums := strings.Split(numStr, ",")
+	replacedStr := strings.ReplaceAll(numStr, "\n", ",")
+	nums := strings.Split(replacedStr, ",")
+
 	for i := 0; i < len(nums); i++ {
 		res, err := strconv.Atoi(nums[i])
 		if err != nil {

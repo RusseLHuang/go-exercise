@@ -42,6 +42,15 @@ func TestStringCalculatorAddSum(t *testing.T) {
 	}
 }
 
+func TestStringCalculatorAddSupportNewLine(t *testing.T) {
+	stringCalculator := StringCalculator{}
+	sum := stringCalculator.Add("1\n2,3\n5")
+
+	if sum != 11 {
+		t.Fatalf("Empty string should return zero")
+	}
+}
+
 func TestStringCalculatorAddInvalidNumber(t *testing.T) {
 	stringCalculator := StringCalculator{}
 
