@@ -1,6 +1,19 @@
 package main
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func assertPanic(t *testing.T, f func()) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
+	f()
+}
 
 func TestStringCalculatorAddEmptyString(t *testing.T) {
 	stringCalculator := StringCalculator{}
@@ -27,4 +40,10 @@ func TestStringCalculatorAddSum(t *testing.T) {
 	if sum != 3 {
 		t.Fatalf("Empty string should return zero")
 	}
+}
+
+func TestStringCalculatorAddInvalidNumber(t *testing.T) {
+	stringCalculator := StringCalculator{}
+
+	assert.Panics(t, func() { stringCalculator.Add("1,x") }, "Should panic when input is not number")
 }
