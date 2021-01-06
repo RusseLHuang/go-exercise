@@ -41,6 +41,11 @@ func (sc *StringCalculator) Add(numStr string) (int, error) {
 		if res < 0 {
 			negativesBuffer.WriteString(nums[i])
 			negativesBuffer.WriteString(",")
+			continue
+		}
+
+		if res > 1000 {
+			continue
 		}
 
 		sum += res

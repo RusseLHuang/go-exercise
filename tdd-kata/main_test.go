@@ -76,6 +76,15 @@ func TestStringCalculatorAddMultipleNegativeNumber(t *testing.T) {
 	}
 }
 
+func TestStringCalculatorAddIgnoreBiggerThanThousand(t *testing.T) {
+	stringCalculator := StringCalculator{}
+	sum, _ := stringCalculator.Add("1,1001,5,1000")
+
+	if sum != 1006 {
+		t.Fatalf("Should ignore thousand")
+	}
+}
+
 func TestStringCalculatorGetCalledCount(t *testing.T) {
 	stringCalculator := StringCalculator{}
 	_, err := stringCalculator.Add("1,-2,-3,-5")
