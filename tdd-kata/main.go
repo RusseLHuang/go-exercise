@@ -1,15 +1,23 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"strconv"
 	"strings"
 )
 
 type StringCalculator struct {
+	AddCalledCount int
 }
 
-func (sc StringCalculator) Add(numStr string) (int, error) {
+func (sc StringCalculator) GetCalledCount() int {
+	return sc.AddCalledCount
+}
+
+func (sc *StringCalculator) Add(numStr string) (int, error) {
+	sc.AddCalledCount++
+
 	sum := 0
 	if numStr == "" {
 		return sum, nil
@@ -25,14 +33,22 @@ func (sc StringCalculator) Add(numStr string) (int, error) {
 	replacedStr := strings.ReplaceAll(numListString, "\n", ",")
 	nums := strings.Split(replacedStr, defaultDelimiter)
 
+	var negativesBuffer bytes.Buffer
+
 	for i := 0; i < len(nums); i++ {
 		res, _ := strconv.Atoi(nums[i])
 
 		if res < 0 {
-			return 0, fmt.Errorf("negatives not allowed")
+			negativesBuffer.WriteString(nums[i])
+			negativesBuffer.WriteString(",")
 		}
 
 		sum += res
+	}
+
+	if negativesBuffer.String() != "" {
+		negativesNums := negativesBuffer.String()
+		return 0, fmt.Errorf("negatives not allowed %s", negativesNums[:len(negativesNums)-1])
 	}
 
 	return sum, nil

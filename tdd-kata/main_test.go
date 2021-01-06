@@ -62,7 +62,36 @@ func TestStringCalculatorAddNegativeNumber(t *testing.T) {
 	stringCalculator := StringCalculator{}
 	_, err := stringCalculator.Add("1,-2")
 
-	if err == nil || err.Error() != "negatives not allowed" {
+	if err == nil || err.Error() != "negatives not allowed -2" {
 		t.Fatalf("Should return error negatives not allowed")
+	}
+}
+
+func TestStringCalculatorAddMultipleNegativeNumber(t *testing.T) {
+	stringCalculator := StringCalculator{}
+	_, err := stringCalculator.Add("1,-2,-3,-5")
+
+	if err == nil || err.Error() != "negatives not allowed -2,-3,-5" {
+		t.Fatalf("Should return error negatives not allowed")
+	}
+}
+
+func TestStringCalculatorGetCalledCount(t *testing.T) {
+	stringCalculator := StringCalculator{}
+	_, err := stringCalculator.Add("1,-2,-3,-5")
+
+	if err == nil || err.Error() != "negatives not allowed -2,-3,-5" {
+		t.Fatalf("Should return error negatives not allowed")
+	}
+
+	_, err = stringCalculator.Add("1,-2")
+
+	if err == nil || err.Error() != "negatives not allowed -2" {
+		t.Fatalf("Should return error negatives not allowed")
+	}
+
+	count := stringCalculator.GetCalledCount()
+	if count != 2 {
+		t.Fatalf("Should called two times")
 	}
 }
