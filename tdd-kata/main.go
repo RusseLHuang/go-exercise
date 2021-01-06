@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -8,10 +9,10 @@ import (
 type StringCalculator struct {
 }
 
-func (sc StringCalculator) Add(numStr string) int {
+func (sc StringCalculator) Add(numStr string) (int, error) {
 	sum := 0
 	if numStr == "" {
-		return sum
+		return sum, nil
 	}
 
 	numListString := numStr
@@ -25,15 +26,16 @@ func (sc StringCalculator) Add(numStr string) int {
 	nums := strings.Split(replacedStr, defaultDelimiter)
 
 	for i := 0; i < len(nums); i++ {
-		res, err := strconv.Atoi(nums[i])
-		if err != nil {
-			panic(err)
+		res, _ := strconv.Atoi(nums[i])
+
+		if res < 0 {
+			return 0, fmt.Errorf("negatives not allowed")
 		}
 
 		sum += res
 	}
 
-	return sum
+	return sum, nil
 }
 
 func isCustomDelimiter(str string) bool {
